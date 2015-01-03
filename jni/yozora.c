@@ -64,10 +64,13 @@ void g_waitMillisecond(int msec)
 	}
 }
 
+static void _invalidate_source_bitmap();
+
 void g_updateScreen(void)
 {
 	if (s_fn_updateScreen)
 	{
+		_invalidate_source_bitmap();
 		(*s_p_env)->CallStaticVoidMethod(s_p_env, s_native_class, s_fn_updateScreen);
 	}
 }
@@ -210,6 +213,23 @@ JNIEXPORT int JNICALL Java_com_avej_game_hadar_YozoraView_processYozora(JNIEnv* 
 	return result;
 }
 
+static JNIEnv* s_p_env2 = 0;
+static jobject s_bitmap;
+
+static void _invalidate_source_bitmap()
+{
+	if (s_p_env2)
+	{
+		void* pixels;
+		AndroidBitmap_unlockPixels(s_p_env2, s_bitmap);
+		AndroidBitmap_lockPixels(s_p_env2, s_bitmap, &pixels);
+	}
+	else
+	{
+		LOGE("Invalid _invalidate_source_bitmap() called");
+	}
+}
+
 JNIEXPORT int JNICALL Java_com_avej_game_hadar_YozoraView_renderYozora(JNIEnv* p_env, jobject obj, jobject bitmap)
 {
     AndroidBitmapInfo  info;
@@ -240,7 +260,12 @@ JNIEXPORT int JNICALL Java_com_avej_game_hadar_YozoraView_renderYozora(JNIEnv* p
         return;
     }
 
+    s_p_env2 = p_env;
+    s_bitmap = bitmap;
+
 	int result = yozora_glue_render(pixels, info.width, info.height, info.stride, 32);
+
+    s_p_env2 = NULL;
 
     AndroidBitmap_unlockPixels(p_env, bitmap);
 
