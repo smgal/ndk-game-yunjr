@@ -710,6 +710,89 @@ yunjr::ControlStatus* yunjr::ControlStatus::newInstance(int x, int y, int width,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// class ControlNoti
+
+namespace yunjr
+{
+	struct ControlNoti::Attribute: public Visible::Attribute
+	{
+		Control::Pos pos;
+		Control::Size size;
+
+		Attribute(int x, int y, int width, int height)
+		{
+			pos.x = x;
+			pos.y = y;
+			size.width = width;
+			size.height = height;
+		}
+	};
+}
+
+yunjr::ControlNoti::ControlNoti()
+{
+}
+
+yunjr::ControlNoti::~ControlNoti()
+{
+}
+
+yunjr::ControlNoti* yunjr::ControlNoti::newInstance(int x, int y, int width, int height)
+{
+	struct ShapeConsole: public Visible::Shape
+	{
+		virtual void render(Visible* p_this, shared::FlatBoard32 dest_board) const
+		{
+			static Typeface typeface;
+			typeface.attribute.size = 32;
+			typeface.attribute.is_italic = false;
+			typeface.attribute.is_bold = false;
+
+			// test
+			static Text text(typeface, L">> The year is 2400 A. D. and the Tzorg Empire has enslaved the city of Metropolis for a while in its quest for galactic domination.  But wait!  There's hope! You, with the help of the Underground, a covert resistance movement, can stop them.");
+
+			Attribute& attribute = *((Attribute*)p_this->getAttribute());
+
+			dest_board->fillRect(attribute.pos.x, attribute.pos.y, attribute.size.width, attribute.size.height, Color32(0xFF300000).argb);
+
+			{
+				const BufferDesc* p_buffer_desc = &gfx::getFrameBuffer()->buffer_desc;
+
+				unsigned long* p = (unsigned long*)p_buffer_desc->p_start_address;
+				int ppl = (p_buffer_desc->bytes_per_line << 3) / p_buffer_desc->bits_per_pixel;
+
+				yunjr::gfx::TextBoard text_board(p, attribute.size.width, attribute.size.height, ppl);
+
+				{
+					static int s_text_x = 720;
+					int text_x = s_text_x;
+					int text_y = 10 + 25;
+					text_board.renderTextFx(text_x, text_y, text, 0xFFFFFFFF, 0xFFFF8080);
+
+					s_text_x -= 3;
+					if (s_text_x < - text.getExtents())
+						s_text_x = 720;
+				}
+			}
+		}
+	};
+
+	struct UpdateNoti: public Visible::Update
+	{
+		virtual bool update(Visible* p_this, unsigned long tick)
+		{
+			return true;
+		}
+	};
+
+	ControlNoti* p_noti = new ControlNoti();
+
+	*p_noti << new Attribute(x, y, width, height) << new ShapeConsole() << new UpdateNoti();
+
+	return p_noti;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // class ControlPanel
 
 namespace yunjr

@@ -83,6 +83,7 @@ namespace yunjr
 			void displayConsole(void);
 			void displayStatus(void);
 			void displayBattle(int);
+			void displayNoti(void);
 		}
 
 		namespace status

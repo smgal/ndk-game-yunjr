@@ -208,3 +208,17 @@ void yunjr::Text::split(int width, Text& remaining_text, ALIGNMETHOD align)
 	}
 
 }
+
+int yunjr::Text::getExtents(void)
+{
+	std::vector<GlyphInfo*>::iterator pp_glyph_info1 = this->p_impl->glyph_info.begin();
+
+	int x = 0;
+
+	for ( ; pp_glyph_info1 != this->p_impl->glyph_info.end(); ++pp_glyph_info1)
+	{
+		x += (*pp_glyph_info1)->x_advance;
+	}
+
+	return x;
+}

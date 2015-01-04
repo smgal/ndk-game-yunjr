@@ -1,4 +1,11 @@
 ﻿
+/* Aspect ratio
+ 800 x 1280 Galaxy Note 1  (1.600)
+ 800 x 1232 Galaxy Note 10.1 (1.540)
+ 720 x 1280 Galaxy Note 2, Galaxy S3 (1.777)
+1600 x 2560 Galaxy S Tab 10.5 (1.600)
+*/
+
 #include "yunjr_base.h"
 #include "yunjr_base_gfx.h"
 #include "yunjr_base_font.h"
@@ -1687,6 +1694,7 @@ void yunjr::init(const char* sz_id)
 		s_p_main_window->addChild(std::make_pair("BATTLE",  ControlBattle::newInstance(8*2, 30*2, 216*2, 241*2)));
 		s_p_main_window->addChild(std::make_pair("CONSOLE", ControlConsole::newInstance(8*2, 285*2, 345*2, 202*2, 8*2, 8*2, 8*2, 8*2)));
 		s_p_main_window->addChild(std::make_pair("STATUS",  ControlStatus::newInstance(238*2, 30*2, 115*2, 241*2)));
+		s_p_main_window->addChild(std::make_pair("NOTI",    ControlNoti::newInstance(0*2, 0*2, 720, 24 * 2)));
 		s_p_main_window->addChild(std::make_pair("PANEL",   ControlPanel::newInstance()));
 
 		resource::setMainWindow(s_p_main_window);

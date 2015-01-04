@@ -69,7 +69,7 @@ bool yunjr::MenuSelection::loop(void)
 
 	unsigned short key;
 	while (short(key = KeyBuffer::getKeyBuffer().getKey()) < 0L)
-		;
+		yunjr::game::window::displayNoti();
 
 	switch (key)
 	{

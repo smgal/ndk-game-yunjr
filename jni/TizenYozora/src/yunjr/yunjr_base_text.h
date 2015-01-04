@@ -32,6 +32,8 @@ namespace yunjr
 		void setColor(unsigned long color);
 		void split(int width, Text& remaining_text, ALIGNMETHOD align = ALIGNMETHOD_LEFT);
 
+		int getExtents(void);
+
 		struct Impl;
 
 	private:

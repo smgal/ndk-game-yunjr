@@ -78,6 +78,20 @@ namespace yunjr
 
 	};
 
+	struct ControlNoti: public Control
+	{
+		struct Attribute;
+
+	public:
+		virtual ~ControlNoti();
+
+		static   ControlNoti* newInstance(int x, int y, int width, int height);
+
+	private:
+		ControlNoti();
+
+	};
+
 	struct ControlPanel: public Control
 	{
 		struct Attribute;

@@ -151,10 +151,6 @@ void yunjr::gfx::TextBoard::renderText(int pos_x, int pos_y, const Text& text, C
 
 void yunjr::gfx::TextBoard::renderText(int pos_x, int pos_y, const std::vector<yunjr::GlyphInfo*>& glyph_info, Color32 color1, Color32 color2)
 {
-	//?? 좀 더 정확한 clipping 계산이 필요
-	if (pos_y > this->m_height)
-		return;
-
 	typedef unsigned long DstPixel;
 	typedef unsigned char SrcPixel;
 	typedef signed long   TgtPixel;
@@ -179,16 +175,43 @@ void yunjr::gfx::TextBoard::renderText(int pos_x, int pos_y, const std::vector<y
 	TgtPixel s_g2 = (color2.argb >> 8) & 0xFF;
 	TgtPixel s_b2 = (color2.argb >> 0) & 0xFF;
 
+	// valid y-axis range
+	DstPixel* const p_dst_y1 = m_p_buffer;
+	DstPixel* const p_dst_y2 = p_dst_y1 + m_pitch * m_height;
+
 	for ( ; pp_glyph != glyph_info.end(); ++pp_glyph)
 	{
 		int offset_x = (*pp_glyph)->left;
 		int offset_y = (*pp_glyph)->top;
 
+		// valid x-axis range
+		DstPixel* p_dst_x1 = m_p_buffer + (pos_y + offset_y) * m_pitch;
+		DstPixel* p_dst_x2 = p_dst_x1 + m_width;
+
 		SrcPixel* p_src = (*pp_glyph)->glyph.p_buffer;
-		DstPixel* p_dst = m_p_buffer + (pos_y + offset_y) * m_pitch + (pos_x + offset_x);
+		DstPixel* p_dst = p_dst_x1 + (pos_x + offset_x);
+
+		// out of screen
+		if (pos_x + offset_x >= m_width)
+			break;
 
 		for (int y = 0; y < (*pp_glyph)->glyph.height; y++)
 		{
+			// y2 clipping
+			if (p_dst_x1 >= p_dst_y2)
+				break;
+
+			// y1 clipping
+			if (p_dst_x1 < p_dst_y1)
+			{
+				p_src += (*pp_glyph)->glyph.bytes_per_line;
+				p_dst += m_pitch;
+				p_dst_x1 += m_pitch;
+				p_dst_x2 += m_pitch;
+
+				continue;
+			}
+
 			TgtPixel gradation = (y << 8) / ((*pp_glyph)->glyph.height - 1);
 
 			TgtPixel s_a = s_a1 + (((s_a2 - s_a1) * gradation) >> 8);
@@ -200,34 +223,51 @@ void yunjr::gfx::TextBoard::renderText(int pos_x, int pos_y, const std::vector<y
 
 			for (int x = 0; x < (*pp_glyph)->glyph.width; x++)
 			{
-				// in case, (*pp_glyph)->glyph.bytes_per_line == (*pp_glyph)->glyph.width
-				TgtPixel gray = *p_src++;
-
-				if (gray > 254)
+				// x2 clipping
+				if (p_dst >= p_dst_x2)
 				{
-					*p_dst = (*p_dst & 0xFF000000) | (s_r << 16) | (s_g << 8) | (s_b);
-				}
-				else if (gray > 0)
-				{
-					gray += (gray >> 7);
-					TgtPixel mul = (s_a * gray) >> 8;
-
-					TgtPixel d_a = (*p_dst) & 0xFF000000;
-					TgtPixel d_r = (*p_dst >> 16) & 0xFF;
-					TgtPixel d_g = (*p_dst >> 8) & 0xFF;
-					TgtPixel d_b = (*p_dst >> 0) & 0xFF;
-
-					d_r += ((s_r - d_r) * mul) >> 8;
-					d_g += ((s_g - d_g) * mul) >> 8;
-					d_b += ((s_b - d_b) * mul) >> 8;
-
-					*p_dst = d_a | (d_r << 16) | (d_g << 8) | (d_b);
+					int add = ((*pp_glyph)->glyph.width - x);
+					p_src += add;
+					p_dst += add;
+					break;
 				}
 
+				// x1 clipping
+				if (p_dst >= p_dst_x1)
+				{
+					// in case, (*pp_glyph)->glyph.bytes_per_line == (*pp_glyph)->glyph.width
+					TgtPixel gray = *p_src;
+
+					if (gray > 254)
+					{
+						*p_dst = (*p_dst & 0xFF000000) | (s_r << 16) | (s_g << 8) | (s_b);
+					}
+					else if (gray > 0)
+					{
+						gray += (gray >> 7);
+						TgtPixel mul = (s_a * gray) >> 8;
+
+						TgtPixel d_a = (*p_dst) & 0xFF000000;
+						TgtPixel d_r = (*p_dst >> 16) & 0xFF;
+						TgtPixel d_g = (*p_dst >> 8) & 0xFF;
+						TgtPixel d_b = (*p_dst >> 0) & 0xFF;
+
+						d_r += ((s_r - d_r) * mul) >> 8;
+						d_g += ((s_g - d_g) * mul) >> 8;
+						d_b += ((s_b - d_b) * mul) >> 8;
+
+						*p_dst = d_a | (d_r << 16) | (d_g << 8) | (d_b);
+					}
+				}
+
+				++p_src;
 				++p_dst;
 			}
-			
+
 			p_dst += (m_pitch - (*pp_glyph)->glyph.width);
+
+			p_dst_x1 += m_pitch;
+			p_dst_x2 += m_pitch;
 		}
 
 		pos_x += (*pp_glyph)->x_advance;

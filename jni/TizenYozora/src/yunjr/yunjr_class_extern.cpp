@@ -407,6 +407,12 @@ namespace yunjr
 
 				game::updateScreen();
 			}
+
+			void displayNoti(void)
+			{
+				INVALIDATE_NOTI;
+				game::updateScreen();
+			}
 		}
 
 		namespace status
