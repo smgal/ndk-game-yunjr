@@ -6,6 +6,7 @@
 
 #include "yunjr_class_control_lv1.h"
 #include "yunjr_class_console.h"
+#include "yunjr_class_game_state.h"
 #include "yunjr_class_extern.h"
 
 
@@ -69,7 +70,31 @@ bool yunjr::MenuSelection::loop(void)
 
 	unsigned short key;
 	while (short(key = KeyBuffer::getKeyBuffer().getKey()) < 0L)
+	{
+		// notification display while key waiting
 		yunjr::game::window::displayNoti();
+
+		// touch processing for menu
+		{
+			const yunjr::GameState& game_state = yunjr::GameState::getInstance();
+			if (game_state.current_input_info.is_touched)
+			{
+				//?? magic number
+				int region_y = (285+8)*2;
+				int menu_y = (49)*2;
+				int menu_y_gap = (21)*2;
+
+				int touch_y = game_state.current_input_info.touch_pos.y - region_y - menu_y;
+
+				if (touch_y >= 0 && touch_y < m_num_enabled * menu_y_gap)
+				{
+					m_currrent = (touch_y / menu_y_gap) + 1;
+					has_been_updated = true;
+					break;
+				}
+			}
+		}
+	}
 
 	switch (key)
 	{

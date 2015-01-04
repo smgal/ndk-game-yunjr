@@ -38,9 +38,9 @@ DEF_v(sample, Load)
 	_Map_SetRow(L"　　　　■　　　毒毒　　　　　　　　男　■　　　　■　　　　")
 	_Map_SetRow(L"　　　　■　　　　毒毒　　　．　　　　　■　　　　■　　　　")
 	_Map_SetRow(L"　　　　■　　　　　　　　．　　　　■■■■　　　■　　　　")
-	_Map_SetRow(L"　　　　■　　　　　　早　　　　　　＋＋＋＋　　　■　　　　")
-	_Map_SetRow(L"　　　　■　　　　　　　　　　男※　＋＋＋＋　　　■　　　　")
-	_Map_SetRow(L"　　　　■　　　■　　　　川　　　　　　　　　　　■　　　　")
+	_Map_SetRow(L"　　　　■　　　　　　早川　　　　　＋＋＋＋　　　■　　　　")
+	_Map_SetRow(L"　　　　■　　　　　　　川　　男※　＋＋＋＋　　　■　　　　")
+	_Map_SetRow(L"　　　　■　　　■　　　川川　　　　　　　　　　　■　　　　")
 	_Map_SetRow(L"　　　　■　　　■　　　川川川　■　　早　　　　　■　　　　")
 	_Map_SetRow(L"　　　　■　　　　■　　　川川　■　　　　　　　　■　　　　")
 	_Map_SetRow(L"　　　　■　　　　■■　　川　　　　　　　　　　　■　　　　")
@@ -97,7 +97,7 @@ ENDDEF
 DEF_ii(sample, Read)
 
 	IF ON(11,15) THEN
-		_Talk("Sign script 1")
+		_Talk(L"안세준 바보다!!!")
 	ELSEIF ON(9,8) THEN
 		_Talk("Sign script 2")
 	ELSEIF ON(19,18) THEN

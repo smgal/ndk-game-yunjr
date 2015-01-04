@@ -22,6 +22,7 @@ win32_external/
 *.user
 *.sh
 *.bak
+*.sav
 
 # Local configuration file (sdk path, etc)
 local.properties

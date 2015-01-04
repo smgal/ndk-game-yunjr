@@ -298,8 +298,8 @@ void yunjr::ControlConsole::add(Text& text)
 {
 	Text remaining;
 
-	//?? 700 is a temporary constant
-	text.split(620, remaining);
+	//?? 345 * 2  - 8 * 2 * 2 is a temporary constant
+	text.split(345 * 2 - 8 * 2 * 2, remaining);
 
 	{
 		Attribute* p_attribute = (Attribute*)this->getAttribute();
@@ -749,7 +749,8 @@ yunjr::ControlNoti* yunjr::ControlNoti::newInstance(int x, int y, int width, int
 			typeface.attribute.is_bold = false;
 
 			// test
-			static Text text(typeface, L">> The year is 2400 A. D. and the Tzorg Empire has enslaved the city of Metropolis for a while in its quest for galactic domination.  But wait!  There's hope! You, with the help of the Underground, a covert resistance movement, can stop them.");
+//			static Text text(typeface, L">> The year is 2400 A. D. and the Tzorg Empire has enslaved the city of Metropolis for a while in its quest for galactic domination.  But wait!  There's hope! You, with the help of the Underground, a covert resistance movement, can stop them.");
+			static Text text(typeface, L">> 달라붙은 쭌뚱어 떼어 드립니다. 010-528-34xx");
 
 			Attribute& attribute = *((Attribute*)p_this->getAttribute());
 
@@ -769,7 +770,7 @@ yunjr::ControlNoti* yunjr::ControlNoti::newInstance(int x, int y, int width, int
 					int text_y = 10 + 25;
 					text_board.renderTextFx(text_x, text_y, text, 0xFFFFFFFF, 0xFFFF8080);
 
-					s_text_x -= 3;
+					s_text_x -= 1;
 					if (s_text_x < - text.getExtents())
 						s_text_x = 720;
 				}
