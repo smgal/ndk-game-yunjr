@@ -15,14 +15,14 @@ namespace yozora
 		int   bits_per_pixel;
 	};
 
-	void init(const char* sz_id);
+	void init(const char* sz_id, const char* sz_data_path);
 	void done();
 	bool loop(const BufferDesc& buffer_desc);
 }
 
-extern "C" void yozora_glue_init(const char* sz_id)
+extern "C" void yozora_glue_init(const char* sz_id, const char* sz_data_path)
 {
-	yozora::init(sz_id);
+	yozora::init(sz_id, sz_data_path);
 }
 
 extern "C" void yozora_glue_done(void)

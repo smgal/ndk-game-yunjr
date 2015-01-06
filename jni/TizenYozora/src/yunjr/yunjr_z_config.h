@@ -16,7 +16,7 @@ namespace yunjr
 		int   bits_per_pixel;
 	};
 
-	void init(const char* sz_id);
+	void init(const char* sz_id, const char* sz_data_path);
 	void done(void);
 	bool loop(const BufferDesc& buffer_desc);
 

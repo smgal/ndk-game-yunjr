@@ -88,11 +88,12 @@ namespace target
 	{
 		s_native_pressed_x = x;
 		s_native_pressed_y = y;
-
+#if 0
 		char s[256];
 		sprintf(s, "[SMGAL] touch(%d, %d)", x, y);
 
 		system::log(s);
+#endif
 	}
 
 	class CInputDevice: public InputDevice

@@ -21,7 +21,7 @@
 	{ \
 		DECLARE_BUFFER_DESC; \
 	  \
-		void init(const char* sz_id); \
+		void init(const char* sz_id, const char* sz_data_path); \
 		void done(void); \
 		bool loop(const BufferDesc& buffer_desc); \
 	} \
@@ -40,11 +40,11 @@ DECLARE_BUFFER_DESC;
 
 struct AppList
 {
-	typedef void (*FnInit)(const char* sz_id);
+	typedef void (*FnInit)(const char* sz_id, const char* sz_data_path);
 	typedef void (*FnDone)(void);
 	typedef bool (*FnLoop)(const BufferDesc& buffer_desc);
 
-	void (*init)(const char* sz_id);
+	void (*init)(const char* sz_id, const char* sz_data_path);
 	void (*done)(void);
 	bool (*loop)(const BufferDesc& buffer_desc);
 
@@ -126,11 +126,11 @@ DECLARE_APP(yozora)
 ////////////////////////////////////////////////////////////////////////////////
 // main
 
-void yozora::init(const char* sz_id)
+void yozora::init(const char* sz_id, const char* sz_data_path)
 {
 	setCurrentApp(sz_id);
 
-	s_init(sz_id);
+	s_init(sz_id, sz_data_path);
 }
 
 void yozora::done()

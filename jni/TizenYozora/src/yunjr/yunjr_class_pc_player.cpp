@@ -1123,7 +1123,7 @@ void yunjr::PcPlayer::castSpellToOne(int ix_object, int ix_enemy)
 
 	while ((enemy[ix_enemy].get() == NULL) || (enemy[ix_enemy]->dead > 0))
 	{
-		if (++ix_enemy > int(enemy.size()))
+		if (++ix_enemy >= int(enemy.size()))
 			return;
 	}
 

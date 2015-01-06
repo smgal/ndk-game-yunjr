@@ -1002,6 +1002,8 @@ void hadar::PcPlayer::attackWithWeapon(int ix_object, int ix_enemy)
 
 	if ((p_enemy->unconscious > 0) && (p_enemy->dead == 0))
 	{
+		game::console::writeConsole(12, 4, sz_gender, "의 일격으로 ", p_enemy->getName(), "의 영혼은 하늘나라로 갔다");
+/*
 		switch (smutil::random(4))
 		{
 		case 0:
@@ -1017,7 +1019,7 @@ void hadar::PcPlayer::attackWithWeapon(int ix_object, int ix_enemy)
 			game::console::writeConsole(12, 1, "적은 비명과 함께 찢겨 나갔다");
 			break;
 		}
-
+*/
 		sound::playFx(sound::SOUND_SCREAM2);
 
 		p_player->m_plusExperience(p_enemy);

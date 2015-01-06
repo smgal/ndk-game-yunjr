@@ -1,6 +1,8 @@
 
 package com.avej.game.hadar;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -46,6 +48,7 @@ class GameConfig
 	static double scaling_factor_x = 1.0;
 	static double scaling_factor_y = 1.0;
 	static long   start_time = 0;
+	static String app_data_path;
 
 	static GameTask game_task;
 	static MediaPlayer media_player;
@@ -210,7 +213,7 @@ public class Hadar extends Activity
 class YozoraView extends View
 {
 	// These functions are implemented in libhadar.so
-	public static native void initYozora(String resource_path, String app_name);
+	public static native void initYozora(String resource_path, String data_path, String app_name);
 	public static native void doneYozora();
 	public static native int  processYozora(long time_ms, int motion_x, int motion_y);
 	public static native int  renderYozora(Bitmap bitmap);
@@ -224,6 +227,11 @@ class YozoraView extends View
 			((Hadar)context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
 			android.util.Log.i("[SMGAL]", "[MAIN] Screen size (" + metrics.widthPixels + "x" + metrics.heightPixels + ")");
+		}
+
+		{
+			File file = context.getFilesDir();
+			GameConfig.app_data_path = file.getAbsolutePath();
 		}
 
 		GameConfig.src_bitmap = Bitmap.createBitmap(GameConfig.BUFFER_WIDTH, GameConfig.BUFFER_HEIGHT, Bitmap.Config.ARGB_8888);
@@ -305,8 +313,8 @@ class GameTask extends AsyncTask<Void, Void, Void>
 			Log.e("[SMGAL]", e.toString());
 			return null;
 		}
-		
-		YozoraView.initYozora(info.applicationInfo.sourceDir, "hadar");
+
+		YozoraView.initYozora(info.applicationInfo.sourceDir, GameConfig.app_data_path, "hadar");
 		
 		while (!GameConfig.is_terminating)
 		{

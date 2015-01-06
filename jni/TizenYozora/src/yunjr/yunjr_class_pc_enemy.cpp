@@ -921,10 +921,10 @@ const yunjr::EnemyData& yunjr::getEnemyDataFromEnemyTable(int index)
 	static bool s_is_first = true;
 	static yunjr::EnemyData s_enemy_data[75] =
 	{	// _name                 str men end res agi accuracy   ac spe clv scl  lv
-		{L"Orc",                   8,  0,  8,  0,  8,{  8,  0},  1,  0,  0,  0,  1},
-		{L"Troll",                 9,  0,  6,  0,  9,{  9,  0},  1,  0,  0,  0,  1},
-		{L"Serpent",               7,  3,  7,  0, 11,{ 11,  6},  1,  1,  1,  0,  1},
-		{L"Earth Worm",            3,  5,  5,  0,  6,{ 11,  7},  1,  0,  1,  0,  1},
+		{L"오크",                  8,  0,  8,  0,  8,{  8,  0},  1,  0,  0,  0,  1},
+		{L"트롤",                  9,  0,  6,  0,  9,{  9,  0},  1,  0,  0,  0,  1},
+		{L"왕 뱀",                 7,  3,  7,  0, 11,{ 11,  6},  1,  1,  1,  0,  1},
+		{L"왕 지렁이",             3,  5,  5,  0,  6,{ 11,  7},  1,  0,  1,  0,  1},
 		{L"Dwarf",                10,  0, 10,  0, 10,{ 10,  0},  2,  0,  0,  0,  2},
 		{L"Giant",                15,  0, 13,  0,  8,{  8,  0},  2,  0,  0,  0,  2},
 		{L"Phantom",               0, 12, 12,  0,  0,{  0, 13},  0,  0,  2,  0,  2},

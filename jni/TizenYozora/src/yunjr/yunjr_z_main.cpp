@@ -94,6 +94,7 @@ namespace
 	///////////////////////////////////////////////////////////////////////////////
 	// GetSaveFileName class;
 
+	char _SAVE_DATA_PATH[1024] = { 0, };
 	const char* SAVE_FILE_NAME = "gamedat";
 	const char* SAVE_FILE_EXT = ".sav";
 
@@ -102,7 +103,8 @@ namespace
 	public:
 		GetSaveFileName(int index)
 		{
-			m_name += "./";
+			m_name += _SAVE_DATA_PATH;
+			m_name += "/";
 			m_name += SAVE_FILE_NAME;
 			m_name += smutil::IntToStr<char>(index)();
 			m_name += SAVE_FILE_EXT;
@@ -1674,7 +1676,7 @@ END_OF_BATTLE:
 	};
 }
 
-void yunjr::init(const char* sz_id)
+void yunjr::init(const char* sz_id, const char* sz_data_path)
 {
 	// for Android (regarding the life cycle of Activity)
 	{
@@ -1683,6 +1685,8 @@ void yunjr::init(const char* sz_id)
 
 		yunjr::GameState::getMutableInstance().reset();
 	}
+
+	strcpy(_SAVE_DATA_PATH, sz_data_path);
 
 	resource::init();
 
@@ -1755,6 +1759,8 @@ void yunjr::init(const char* sz_id)
 		party.x = -1;
 		party.y = -1;
 
+		party.food = 99;
+
 		party.ability.can_use_ESP = false;
 		party.ability.can_use_special_magic = false;
 	}
@@ -1770,13 +1776,14 @@ void yunjr::init(const char* sz_id)
 
 			p_player->setDefault(0);
 
-			p_player->setName(L"SMgal");
-			p_player->class_ = 3;
+			p_player->setName(L"쭈니쭈니");
+			p_player->class_ = 1;
 			p_player->level[0] = 19;
 			p_player->level[1] = 19;
 			p_player->level[2] = 19;
 			p_player->hp = 190;
 			p_player->level[0] = 19;
+			p_player->weapon = 4;
 
 			p_player->order = order++;
 			player_list.push_back(p_player);
@@ -1788,7 +1795,7 @@ void yunjr::init(const char* sz_id)
 
 			p_player->setDefault(0);
 
-			p_player->setName(L"Hercules");
+			p_player->setName(L"헤라클레스");
 			p_player->hp = 17;
 			p_player->sp = 5;
 			p_player->esp = 5;
@@ -1805,7 +1812,7 @@ void yunjr::init(const char* sz_id)
 
 			p_player->setDefault(0);
 
-			p_player->setName(L"Betelgeuse");
+			p_player->setName(L"베텔규스");
 			p_player->gender = PcPlayer::GENDER_FEMALE;
 			p_player->hp = 7;
 			p_player->sp = 17;

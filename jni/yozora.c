@@ -148,7 +148,7 @@ void g_createBufferFromCompressedFile(const char* sz_file_name, unsigned char** 
 ////////////////////////////////////////////////////////////////////////////////
 //
 
-extern void yozora_glue_init(const char* sz_id);
+extern void yozora_glue_init(const char* sz_id, const char* sz_data_path);
 extern void yozora_glue_done(void);
 extern int  yozora_glue_process(int touch_x, int touch_y);
 extern int  yozora_glue_render(void* p_start_address, int width, int height, int bytes_per_line, int bits_per_pixel);
@@ -156,7 +156,7 @@ extern int  yozora_glue_render(void* p_start_address, int width, int height, int
 ////////////////////////////////////////////////////////////////////////////////
 //
 
-JNIEXPORT void JNICALL Java_com_avej_game_hadar_YozoraView_initYozora(JNIEnv* p_env, jobject obj, jstring sj_package_name, jstring sj_app_name)
+JNIEXPORT void JNICALL Java_com_avej_game_hadar_YozoraView_initYozora(JNIEnv* p_env, jobject obj, jstring sj_package_name, jstring sj_data_path, jstring sj_app_name)
 {
 	s_p_env = p_env;
 
@@ -196,7 +196,11 @@ JNIEXPORT void JNICALL Java_com_avej_game_hadar_YozoraView_initYozora(JNIEnv* p_
 	// initialize with app_name
 	{
 		const char* p_app_name = (*p_env)->GetStringUTFChars(p_env, sj_app_name, 0);
-		yozora_glue_init(p_app_name);
+		const char* p_data_path = (*p_env)->GetStringUTFChars(p_env, sj_data_path, 0);
+
+		yozora_glue_init(p_app_name, p_data_path);
+
+		(*p_env)->ReleaseStringUTFChars(p_env, sj_data_path, p_data_path);
 		(*p_env)->ReleaseStringUTFChars(p_env, sj_app_name, p_app_name);
 	}
 }

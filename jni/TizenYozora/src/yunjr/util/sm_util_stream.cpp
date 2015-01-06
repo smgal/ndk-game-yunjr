@@ -4,6 +4,15 @@
 #include "sm_util_sena.h"
 #include "sm_util_stream.h"
 
+// for debugging
+namespace target
+{
+	namespace system
+	{
+		void log(const char* sz_message);
+	}
+}
+
 /***************************************************
                    FileReadStream
 ***************************************************/
@@ -11,6 +20,12 @@
 smutil::FileReadStream::FileReadStream(const char* sz_file_name)
 {
 	m_p_file = fopen(sz_file_name, "rb");
+
+	{
+		char message[512];
+		sprintf(message, "[SMGAL] File reading: %s %s", sz_file_name, (m_p_file) ? "found" : "NOT found");
+		target::system::log(message);
+	}
 
 	this->m_is_available = (m_p_file != 0);
 }
@@ -175,6 +190,12 @@ bool smutil::MemoryReadStream::isValidPos(void) const
 smutil::FileWriteStream::FileWriteStream(const char* sz_file_name)
 {
 	m_p_file = fopen(sz_file_name, "wb");
+
+	{
+		char message[512];
+		sprintf(message, "[SMGAL] File writing: %s %s", sz_file_name, (m_p_file) ? "created" : "NOT created");
+		target::system::log(message);
+	}
 
 	this->m_is_available = (m_p_file != 0);
 }

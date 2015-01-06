@@ -118,12 +118,15 @@ DEF_ii(sample, Occur)
 		IF _Flag_IsSet(_FLAG_BATTLE) THEN
 
 			_Battle_Init()
-
+/*
 			_Battle_RegisterEnemy(69)
 			_Battle_RegisterEnemy(71)
 			_Battle_RegisterEnemy(75)
-			_Battle_RegisterEnemy(3)
+*/
 			_Battle_RegisterEnemy(1)
+			_Battle_RegisterEnemy(3)
+			_Battle_RegisterEnemy(2)
+			_Battle_RegisterEnemy(4)
 			_Battle_ShowEnemy()
 
 			_Talk(L"여기는 Necromancer를 만날 수 있는 이벤트다")
