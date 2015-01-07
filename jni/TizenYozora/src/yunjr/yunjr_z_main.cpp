@@ -876,12 +876,9 @@ END_OF_BATTLE:
 		console.write(L"");
 
 		console.setTextColorIndex(3);
-		CONSOLE_WRITE(L"체력   : @", selected.strength)
-		CONSOLE_WRITE(L"정신력 : @", selected.mentality)
-		CONSOLE_WRITE(L"집중력 : @", selected.concentration)
-		CONSOLE_WRITE(L"인내력 : @", selected.endurance)
-		CONSOLE_WRITE(L"저항력 : @", selected.resistance)
-		CONSOLE_WRITE(L"민첩성 : @", selected.agility)
+		CONSOLE_WRITE2(L"체력   : @    정신력 : @", selected.strength, selected.mentality)
+		CONSOLE_WRITE2(L"집중력 : @    인내력 : @", selected.concentration, selected.endurance)
+		CONSOLE_WRITE2(L"저항력 : @    민첩성 : @", selected.resistance, selected.agility)
 		CONSOLE_WRITE(L"행운   : @", selected.luck)
 
 		console.display();
@@ -897,15 +894,11 @@ END_OF_BATTLE:
 		CONSOLE_WRITE_SS(L"# 성별 : ", selected.getGenderName())
 		CONSOLE_WRITE_SS(L"# 계급 : ", selected.getClassName())
 
-		console.write(L"");
-
 		console.setTextColorIndex(3);
 		CONSOLE_WRITE2(L"무기의 정확성   : @    전투 레벨   : @", selected.accuracy[0], selected.level[0])
 		CONSOLE_WRITE2(L"정신력의 정확성 : @    마법 레벨   : @", selected.accuracy[1], selected.level[1])
 		CONSOLE_WRITE2(L"초감각의 정확성 : @    초감각 레벨 : @", selected.accuracy[2], selected.level[2])
 		CONSOLE_WRITE(L"## 경험치   : @", selected.experience)
-
-		console.write(L"");
 
 		console.setTextColorIndex(2);
 		CONSOLE_WRITE_SS(L"사용 무기 - ", selected.getWeaponName())
@@ -1842,8 +1835,27 @@ void yunjr::init(const char* sz_id, const char* sz_data_path)
 			p_player->order = order++;
 			player_list.push_back(p_player);
 		}
-
 	}
+
+	// save를 해야 하는 object의 목록 등록
+	{
+		sena::vector<yunjr::Serialized*>& save_list = yunjr::game::object::getSaveList();
+
+		yunjr::PcParty& party = yunjr::game::object::getParty();
+		save_list.push_back(&party);
+
+		sena::vector<shared::PcPlayer>& player_list = game::object::getPlayerList();
+//		for (int i = 0; i < MAX_PLAYER; i++)
+		for (int i = 0; i < player_list.size(); i++)
+			save_list.push_back(player_list[i].get());
+
+		Map& map = game::object::getMap();
+		save_list.push_back(&map);
+
+		//??
+		//save_list.push_back(&game_option);
+	}
+
 }
 
 void yunjr::done()
